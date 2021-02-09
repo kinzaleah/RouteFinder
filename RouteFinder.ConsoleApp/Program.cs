@@ -25,16 +25,18 @@ namespace RouteFinder.ConsoleApp
             var startPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userStartPoint);
 
             Console.WriteLine($"You have chosen '{userStartPoint}' as your start point.");
-            Console.WriteLine($"Please choose an end point - (A-D)");
+            Console.WriteLine("Please choose an end point - (A-D)");
 
             var userEndPoint = Console.ReadLine()?.ToUpper();
             var endPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userEndPoint);
 
             Console.WriteLine($"You have chosen '{userEndPoint}' as your start point.");
 
-            var shortestRouteList = new RouteFinder(paths, new RouteExplorer(), new ShortestRouteFinder()).CalculateShortestRoute(startPointEnum, endPointEnum);
+            var shortestRouteList = new RouteFinder(
+                paths, 
+                new RouteExplorer(), 
+                new ShortestRouteFinder()).CalculateShortestRoute(startPointEnum, endPointEnum);
 
-            //shortestRouteList.Paths.ForEach(Console.WriteLine);
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine($"The shortest route for {userStartPoint} to {userEndPoint} is: ");
 
