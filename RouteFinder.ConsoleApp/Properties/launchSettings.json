@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RouteFinder.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "\"A\" \"C\""
+    }
+  }
+}
