@@ -7,7 +7,7 @@
     {
         public Route GetShortestRoute(IEnumerable<Route> routes)
         {
-            return routes.OrderBy(x => x.TotalDistance).First();
+            return routes.Any() ? routes.OrderBy(x => x.TotalDistance).First() : null;
         }
     }
 }

@@ -7,12 +7,12 @@ namespace Core.Tests
 {
     public class RouteExplorerTests
     {
-        private readonly Point pointA = new Point() { Id = 1, Name = "A" };
-        private readonly Point pointB = new Point() { Id = 2, Name = "B" };
-        private readonly Point pointC = new Point() { Id = 3, Name = "C" };
-        private readonly Point pointD = new Point() { Id = 4, Name = "D" };
-        private readonly Point pointE = new Point() { Id = 5, Name = "E" };
-        private readonly Point pointH = new Point() { Id = 5, Name = "H" };
+        private readonly Point pointA = new Point { Id = 1, Name = "A" };
+        private readonly Point pointB = new Point { Id = 2, Name = "B" };
+        private readonly Point pointC = new Point { Id = 3, Name = "C" };
+        private readonly Point pointD = new Point { Id = 4, Name = "D" };
+        private readonly Point pointE = new Point { Id = 5, Name = "E" };
+        private readonly Point pointH = new Point { Id = 6, Name = "H" };
 
         [Fact]
         public void Should_Explore_All_Single_Path_Routes_For_Given_Points()
@@ -147,7 +147,7 @@ namespace Core.Tests
                 new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 new Path {Id = 5, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
                 new Path {Id = 6, PointOne = this.pointC, PointTwo = this.pointE, Distance = 7},
-                new Path {Id = 7, PointOne = this.pointH, PointTwo = this.pointB, Distance = 7},
+                new Path {Id = 7, PointOne = this.pointH, PointTwo = this.pointB, Distance = 7}
             };
 
             var sut = new RouteExplorer();
@@ -156,7 +156,6 @@ namespace Core.Tests
             var result = sut.GetAllPossibleRoutes(routes, startPoint, endPoint);
 
             // Assert
-
             var expectedOne = new Route
             {
                 Paths = new List<Path>
@@ -171,37 +170,12 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path
-                    {
-                        Id = 1,
-                        PointOne = this.pointA,
-                        PointTwo = this.pointB,
-                        Distance = 1
-                    },
-                    new Path
-                    {
-                        Id = 2,
-                        PointOne = this.pointB,
-                        PointTwo = this.pointC,
-                        Distance = 4
-                    },
-                    new Path
-                    {
-                        Id = 5,
-                        PointOne = this.pointA,
-                        PointTwo = this.pointC,
-                        Distance = 5
-                    },
-                    new Path
-                    {
-                        Id = 4, 
-                        PointOne = this.pointA, 
-                        PointTwo = this.pointD, 
-                        Distance = 20
-                    },
+                    new Path {Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1},
+                    new Path {Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4},
+                    new Path {Id = 5, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                    new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 }
             };
-            
             
             var expectedThree = new Route
             {
@@ -224,31 +198,12 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path
-                    {
-                        Id = 5,
-                        PointOne = this.pointA,
-                        PointTwo = this.pointC,
-                        Distance = 5
-                    },
-                    new Path
-                    {
-                        Id = 2,
-                        PointOne = this.pointB,
-                        PointTwo = this.pointC,
-                        Distance = 4
-                    },
-                    new Path
-                    {
-                        Id = 1,
-                        PointOne = this.pointA,
-                        PointTwo = this.pointB,
-                        Distance = 1
-                    },
+                    new Path {Id = 5, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                    new Path {Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4},
+                    new Path {Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1},
                     new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 }
             };
-
 
             result.Count().Should().Be(5);
             result.Should().BeEquivalentTo(
@@ -258,8 +213,7 @@ namespace Core.Tests
                         expectedTwo,
                         expectedThree,
                         expectedFive,
-                        expectedFour,
-                        
+                        expectedFour
                     }
                 );
         }
