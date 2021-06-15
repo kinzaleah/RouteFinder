@@ -5,25 +5,32 @@ using Xunit;
 namespace Core.Tests
 {
     using System;
+    using Core.Data;
     using Moq;
 
     public class RouteFinderTests
     {
+        private readonly Point pointA = new Point() { Id = 1, Name = "A" };
+        private readonly Point pointB = new Point() { Id = 2, Name = "B" };
+        private readonly Point pointC = new Point() { Id = 3, Name = "C" };
+        private readonly Point pointD = new Point() { Id = 4, Name = "D" };
+        private readonly Point pointE = new Point() { Id = 5, Name = "E" };
+
         [Fact]
         public void Given_Two_Possible_Routes_RouteFinder_Should_Find_The_Shortest_One()
         {
             // Arrange
             var routes = new List<Path>
             {
-                new Path { Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1 },
-                new Path { Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4 },
-                new Path { Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3 },
-                new Path { Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20 }
+                new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                new Path { Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20 }
             };
-            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), routes, new RouteValidator());
-            // mocking the routeExplorer? next time
-            var startPoint = Points.A;
-            var endPoint = Points.D;
+            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), new DatabaseReader(), new RouteValidator());
+            
+            var startPoint = this.pointA;
+            var endPoint = this.pointD;
 
             // Act
             var result = routeFinder.CalculateShortestRoute(startPoint, endPoint);
@@ -32,9 +39,9 @@ namespace Core.Tests
             result.Paths.Should().BeEquivalentTo(
                 new List<Path>
                 {
-                    new Path { Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1 },
-                    new Path { Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4 },
-                    new Path { Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3 }
+                    new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                    new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                    new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
 
                 }
             );
@@ -46,15 +53,15 @@ namespace Core.Tests
             // Arrange
             var routes = new List<Path>
             {
-                new Path { Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1 },
-                new Path { Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4 },
-                new Path { Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3 },
-                new Path { Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20 }
+                new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                new Path { Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20 }
             };
-            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), routes, new RouteValidator());
+            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), new DatabaseReader(), new RouteValidator());
             
-            var startPoint = Points.A;
-            var endPoint = Points.A;
+            var startPoint = this.pointA;
+            var endPoint = this.pointA;
 
             // Act
             var result = routeFinder.CalculateShortestRoute(startPoint, endPoint);
@@ -67,15 +74,15 @@ namespace Core.Tests
         public void RouteFinder_Should_Call_RouteExplorer()
         {
             // Arrange
-            var startPoint = Points.A;
-            var endPoint = Points.D;
+            var startPoint = this.pointA;
+            var endPoint = this.pointD;
 
             var routes = new List<Path>
             {
-                new Path { Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1 },
-                new Path { Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4 },
-                new Path { Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3 },
-                new Path { Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20 }
+                new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                new Path { Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20 }
             };
 
             var expected = new List<Route>
@@ -90,7 +97,7 @@ namespace Core.Tests
             var mockRouteExplorer = new Mock<IRouteExplorer>();
             
             mockRouteExplorer
-                .Setup(x => x.GetAllPossibleRoutes(It.IsAny<List<Path>>(), It.IsAny<Core.Points>(), It.IsAny<Core.Points>()))
+                .Setup(x => x.GetAllPossibleRoutes(It.IsAny<List<Path>>(), It.IsAny<Point>(), It.IsAny<Point>()))
                 .Returns(expected);
 
             var mockShortestRouteFinder = new Mock<IShortestRouteFinder>();
@@ -103,7 +110,7 @@ namespace Core.Tests
                 .Setup(x => x.GetShortestRoute(expected))
                 .Returns(mockShortestRouteFinderResult);
 
-            var routeFinder = new RouteFinder(mockRouteExplorer.Object, mockShortestRouteFinder.Object, routes, mockRouteValidator.Object);
+            var routeFinder = new RouteFinder(mockRouteExplorer.Object, mockShortestRouteFinder.Object, new DatabaseReader(), mockRouteValidator.Object);
             
             // Act
             var result = routeFinder.CalculateShortestRoute(startPoint, endPoint);
@@ -118,15 +125,15 @@ namespace Core.Tests
         public void RouteFinder_Should_Call_RouteValidator()
         {
             // Arrange
-            var startPoint = Points.A;
-            var endPoint = Points.A;
+            var startPoint = this.pointA;
+            var endPoint = this.pointA;
 
             var routes = new List<Path>
             {
-                new Path { Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1 },
-                new Path { Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4 },
-                new Path { Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3 },
-                new Path { Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20 }
+                new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                new Path { Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20 }
             };
 
             var expected = new List<Route>
@@ -140,7 +147,7 @@ namespace Core.Tests
             var mockRouteExplorer = new Mock<IRouteExplorer>();
 
             mockRouteExplorer
-                .Setup(x => x.GetAllPossibleRoutes(It.IsAny<List<Path>>(), It.IsAny<Core.Points>(), It.IsAny<Core.Points>()))
+                .Setup(x => x.GetAllPossibleRoutes(It.IsAny<List<Path>>(), It.IsAny<Point>(), It.IsAny<Point>()))
                 .Returns(expected);
 
             var mockShortestRouteFinder = new Mock<IShortestRouteFinder>();
@@ -159,13 +166,12 @@ namespace Core.Tests
                 .Setup(x => x.ValidateInput(startPoint, endPoint))
                 .Throws(mockRouteValidatorResult);
 
-            var routeFinder = new RouteFinder(mockRouteExplorer.Object, mockShortestRouteFinder.Object, routes, mockRouteValidator.Object);
+            var routeFinder = new RouteFinder(mockRouteExplorer.Object, mockShortestRouteFinder.Object, new DatabaseReader(), mockRouteValidator.Object);
 
             // Act
             Action result = () => routeFinder.CalculateShortestRoute(startPoint, endPoint);
 
-            // Assert
-            //Assert.Equal("The start and end point cannot be the same", mockRouteValidatorResult.Message);  
+            // Assert 
             result.Should().Throw<InputValidationException>()
                   .WithMessage("The start and end point cannot be the same");
         }

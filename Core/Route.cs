@@ -17,5 +17,12 @@ namespace Core
         {
             Paths = new List<Path>();
         }
+
+        public override string ToString()
+        {
+            //return base.ToString();
+
+            return string.Join("," , this.Paths.Select(x => x.Id.ToString()));
+        }
     }
 }

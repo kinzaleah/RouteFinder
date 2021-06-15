@@ -4,9 +4,9 @@
     {
         public int Id { get; set; }
 
-        public Points PointOne { get; set; }
+        public Point PointOne { get; set; }
 
-        public Points PointTwo { get; set; }
+        public Point PointTwo { get; set; }
 
         public int Distance { get; set; }
     }

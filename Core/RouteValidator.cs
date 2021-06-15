@@ -2,7 +2,7 @@
 {
     public class RouteValidator : IRouteValidator
     {
-        public void ValidateInput(Points startPoint, Points endPoint)
+        public void ValidateInput(Point startPoint, Point endPoint)
         {
             if (startPoint == endPoint)
             {

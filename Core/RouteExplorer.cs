@@ -6,7 +6,7 @@ namespace Core
 
     public class RouteExplorer : IRouteExplorer
     {
-        public IEnumerable<Route> GetAllPossibleRoutes(List<Path> paths, Points startPoint, Points endPoint)
+        public IEnumerable<Route> GetAllPossibleRoutes(List<Path> paths, Point startPoint, Point endPoint)
         {
             var routesThatWork = new List<Route>();
             var routeWeAreExploring = new Route();
@@ -18,8 +18,8 @@ namespace Core
 
         private void LoopThroughRemainingPaths(
             List<Path> paths,
-            Points startPoint,
-            Points endPoint,
+            Point startPoint,
+            Point endPoint,
             Route routeWeAreExploring,
             List<Route> routesThatWork
         )

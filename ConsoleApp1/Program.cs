@@ -1,88 +1,68 @@
-﻿using System;
-
-namespace ConsoleApp1
+﻿namespace ConsoleApp1
 {
-    using System.Reflection.Metadata;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.SqlClient;
+    using System.Linq;
+    using Core;
+    using Core.Data;
+    using Dapper;
 
     class Program
     {
+        private const string ConnectionString = @"Server=LT229\SQLEXPRESS;Database=RouteFinder;User Id=routefinder_user;Password=Welcome1!;";
+        // private const string ConnectionString = @"Data Source=LT229\SQLEXPRESS;Initial Catalog=RouteFinder;Integrated Security=True";
+
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            
+            //using (var conn = new SqlConnection(ConnectionString))
+            //{
+            //    var query = "SELECT id, name FROM points";
 
-            var dogOne = new GermanShepherd();
+            //    using (var cmd = new SqlCommand(query))
+            //    {
+            //        cmd.Connection = conn;
+            //        conn.Open();
 
-            MakeTalk(dogOne);
+            //        using (var reader = cmd.ExecuteReader())
+            //        {
+            //            while (reader.Read())
+            //            {
+            //                points.Add(new Point()
+            //                {
+            //                    Id = Convert.ToInt32(reader["id"]),
+            //                    Name = reader["name"].ToString(),
+            //                });
+            //            }
+            //        }
+            //    }
+            //}
 
-            dogOne.Weight = 51;
+            //List<Point> points;
 
-            Console.WriteLine(dogOne.Weight);
+            //using (var connection = new SqlConnection(ConnectionString))
+            //{
+            //    var query = "SELECT id, name FROM points";
 
-            Console.ReadLine();
+            //    points = connection.Query<Point>(query).ToList();
+            //}
+            //var dbReader = new DatabaseReader();
+            //List<Path> paths = dbReader.GetAllPaths().ToList();
 
-            var catOne = new Cat();
 
-            MakeTalk(catOne);
+            //foreach (var path in paths)
+            //{
+            //    Console.WriteLine($"{path.Id} {path.PointOne} {path.PointTwo} {path.Distance}");
+            //}
 
-            Console.ReadLine();
-        }
 
-        static void MakeTalk(IAnimal animal)
-        {
-            Console.WriteLine(animal.Speak());
-        }
-    }
+            var obj = new object();
 
-    class Animal : IAnimal
-    {
-        private readonly string _words;
-        public Animal(string words)
-        {
-            this._words = words;
-        }
+            var objType = obj.GetType();
 
-        public virtual string Speak()
-        {
-            return this._words;
-        }
-
-        public int NumberOfLegs { get; set; }
-    }
-
-    class Dog : Animal
-    {
-        public Dog() : base("woof")
-        {
-
-        }
-
-        public int Weight
-        {
-            get;
-            set;
-        }
-    }
-
-    class Cat : Animal
-    {
-
-        public Cat() : base("miaow")
-        {
+            //var newInteger = 7;
 
         }
-        public override string Speak()
-        {
-            return "Purrrrrr";
-        }
-    }
-
-    class GermanShepherd : Dog
-    {
-
-    }
-
-    public interface IAnimal
-    {
-        string Speak();
     }
 }

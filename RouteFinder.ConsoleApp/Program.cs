@@ -24,21 +24,7 @@ namespace RouteFinder.ConsoleApp
 
             var startPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userStartPoint);
             var endPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userEndPoint);
-
-            //Console.WriteLine("Welcome to my application! I will calculate the shortest route if you give me a start and end point.");
-            //Console.WriteLine("Please enter your start point - (A-D)");
-
-            //var userStartPoint = Console.ReadLine()?.ToUpper();
-            //var startPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userStartPoint);
-
-            //Console.WriteLine($"You have chosen '{userStartPoint}' as your start point.");
-            //Console.WriteLine("Please choose an end point - (A-D)");
-
-            //var userEndPoint = Console.ReadLine()?.ToUpper();
-            //var endPointEnum = (Core.Points)Enum.Parse(typeof(Core.Points), userEndPoint);
-
-            //Console.WriteLine($"You have chosen '{userEndPoint}' as your start point.");
-
+            
             var routeFinder = new RouteFinder(
                 new RouteExplorer(),
                 new ShortestRouteFinder(), 
@@ -54,9 +40,6 @@ namespace RouteFinder.ConsoleApp
             {
                 Console.WriteLine($"Path {path.Id}: {path.PointOne} to {path.PointTwo} - Distance {path.Distance}");
             }
-
-
-
         }
     }
 }

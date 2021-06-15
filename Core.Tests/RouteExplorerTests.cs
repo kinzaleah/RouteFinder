@@ -7,18 +7,25 @@ namespace Core.Tests
 {
     public class RouteExplorerTests
     {
+        private readonly Point pointA = new Point() { Id = 1, Name = "A" };
+        private readonly Point pointB = new Point() { Id = 2, Name = "B" };
+        private readonly Point pointC = new Point() { Id = 3, Name = "C" };
+        private readonly Point pointD = new Point() { Id = 4, Name = "D" };
+        private readonly Point pointE = new Point() { Id = 5, Name = "E" };
+        private readonly Point pointH = new Point() { Id = 5, Name = "H" };
+
         [Fact]
         public void Should_Explore_All_Single_Path_Routes_For_Given_Points()
         {
             // Arrange
-            var startPoint = Points.A;
-            var endPoint = Points.D;
+            var startPoint = this.pointA;
+            var endPoint = this.pointD;
 
             var routes = new List<Path>
             {
-                new Path {Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
-                new Path {Id = 5, PointOne = Points.D, PointTwo = Points.A, Distance = 14},
-                new Path {Id = 6, PointOne = Points.A, PointTwo = Points.C, Distance = 5}
+                new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
+                new Path {Id = 5, PointOne = this.pointD, PointTwo = this.pointA, Distance = 14},
+                new Path {Id = 6, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5}
             };
 
             var sut = new RouteExplorer();
@@ -32,7 +39,7 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
+                    new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 }
             };
 
@@ -40,7 +47,7 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 5, PointOne = Points.D, PointTwo = Points.A, Distance = 14},
+                    new Path {Id = 5, PointOne = this.pointD, PointTwo = this.pointA, Distance = 14},
                 }
             };
 
@@ -58,18 +65,18 @@ namespace Core.Tests
         public void Should_Explore_All_Two_Path_Routes_For_Given_Points()
         {
             // Arrange
-            var startPoint = Points.A;
-            var endPoint = Points.D;
+            var startPoint = this.pointA;
+            var endPoint = this.pointD;
 
             var routes = new List<Path>
             {
-                new Path {Id = 4, PointOne = Points.B, PointTwo = Points.E, Distance = 20},
-                new Path {Id = 3, PointOne = Points.A, PointTwo = Points.D, Distance = 15},
-                new Path {Id = 5, PointOne = Points.D, PointTwo = Points.A, Distance = 14},
-                new Path {Id = 6, PointOne = Points.A, PointTwo = Points.C, Distance = 5},
-                new Path {Id = 7, PointOne = Points.C, PointTwo = Points.D, Distance = 5},
-                new Path {Id = 8, PointOne = Points.B, PointTwo = Points.A, Distance = 5},
-                new Path {Id = 9, PointOne = Points.D, PointTwo = Points.B, Distance = 5}
+                new Path {Id = 4, PointOne = this.pointB, PointTwo = this.pointE, Distance = 20},
+                new Path {Id = 3, PointOne = this.pointA, PointTwo = this.pointD, Distance = 15},
+                new Path {Id = 5, PointOne = this.pointD, PointTwo = this.pointA, Distance = 14},
+                new Path {Id = 6, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                new Path {Id = 7, PointOne = this.pointC, PointTwo = this.pointD, Distance = 5},
+                new Path {Id = 8, PointOne = this.pointB, PointTwo = this.pointA, Distance = 5},
+                new Path {Id = 9, PointOne = this.pointD, PointTwo = this.pointB, Distance = 5}
             };
 
             var sut = new RouteExplorer();
@@ -83,8 +90,8 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 6, PointOne = Points.A, PointTwo = Points.C, Distance = 5},
-                    new Path {Id = 7, PointOne = Points.C, PointTwo = Points.D, Distance = 5},
+                    new Path {Id = 6, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                    new Path {Id = 7, PointOne = this.pointC, PointTwo = this.pointD, Distance = 5},
                 }
             };
 
@@ -92,7 +99,7 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 5, PointOne = Points.D, PointTwo = Points.A, Distance = 14},
+                    new Path {Id = 5, PointOne = this.pointD, PointTwo = this.pointA, Distance = 14},
                 }
             };
 
@@ -100,8 +107,8 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 8, PointOne = Points.B, PointTwo = Points.A, Distance = 5},
-                    new Path {Id = 9, PointOne = Points.D, PointTwo = Points.B, Distance = 5},
+                    new Path {Id = 8, PointOne = this.pointB, PointTwo = this.pointA, Distance = 5},
+                    new Path {Id = 9, PointOne = this.pointD, PointTwo = this.pointB, Distance = 5},
                 }
             };
 
@@ -109,7 +116,7 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 3, PointOne = Points.A, PointTwo = Points.D, Distance = 15},
+                    new Path {Id = 3, PointOne = this.pointA, PointTwo = this.pointD, Distance = 15},
                 }
             };
 
@@ -129,18 +136,18 @@ namespace Core.Tests
     public void Should_Explore_All_Possible_Routes_For_Given_Points()
         {
             // Arrange
-            var startPoint = Points.A;
-            var endPoint = Points.D;
+            var startPoint = this.pointA;
+            var endPoint = this.pointD;
 
             var routes = new List<Path>
             {
-                new Path {Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1},
-                new Path {Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4},
-                new Path {Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3},
-                new Path {Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
-                new Path {Id = 5, PointOne = Points.A, PointTwo = Points.C, Distance = 5},
-                new Path {Id = 6, PointOne = Points.C, PointTwo = Points.E, Distance = 7},
-                new Path {Id = 7, PointOne = Points.H, PointTwo = Points.B, Distance = 7},
+                new Path {Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1},
+                new Path {Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4},
+                new Path {Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3},
+                new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
+                new Path {Id = 5, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                new Path {Id = 6, PointOne = this.pointC, PointTwo = this.pointE, Distance = 7},
+                new Path {Id = 7, PointOne = this.pointH, PointTwo = this.pointB, Distance = 7},
             };
 
             var sut = new RouteExplorer();
@@ -154,9 +161,9 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 1, PointOne = Points.A, PointTwo = Points.B, Distance = 1},
-                    new Path {Id = 2, PointOne = Points.B, PointTwo = Points.C, Distance = 4},
-                    new Path {Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3},
+                    new Path {Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1},
+                    new Path {Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4},
+                    new Path {Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3},
                 }
             };
 
@@ -167,29 +174,29 @@ namespace Core.Tests
                     new Path
                     {
                         Id = 1,
-                        PointOne = Points.A,
-                        PointTwo = Points.B,
+                        PointOne = this.pointA,
+                        PointTwo = this.pointB,
                         Distance = 1
                     },
                     new Path
                     {
                         Id = 2,
-                        PointOne = Points.B,
-                        PointTwo = Points.C,
+                        PointOne = this.pointB,
+                        PointTwo = this.pointC,
                         Distance = 4
                     },
                     new Path
                     {
                         Id = 5,
-                        PointOne = Points.A,
-                        PointTwo = Points.C,
+                        PointOne = this.pointA,
+                        PointTwo = this.pointC,
                         Distance = 5
                     },
                     new Path
                     {
                         Id = 4, 
-                        PointOne = Points.A, 
-                        PointTwo = Points.D, 
+                        PointOne = this.pointA, 
+                        PointTwo = this.pointD, 
                         Distance = 20
                     },
                 }
@@ -200,7 +207,7 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
+                    new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 }
             };
 
@@ -208,8 +215,8 @@ namespace Core.Tests
             {
                 Paths = new List<Path>
                 {
-                    new Path {Id = 5, PointOne = Points.A, PointTwo = Points.C, Distance = 5},
-                    new Path {Id = 3, PointOne = Points.C, PointTwo = Points.D, Distance = 3},
+                    new Path {Id = 5, PointOne = this.pointA, PointTwo = this.pointC, Distance = 5},
+                    new Path {Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3},
                 }
             };
 
@@ -220,25 +227,25 @@ namespace Core.Tests
                     new Path
                     {
                         Id = 5,
-                        PointOne = Points.A,
-                        PointTwo = Points.C,
+                        PointOne = this.pointA,
+                        PointTwo = this.pointC,
                         Distance = 5
                     },
                     new Path
                     {
                         Id = 2,
-                        PointOne = Points.B,
-                        PointTwo = Points.C,
+                        PointOne = this.pointB,
+                        PointTwo = this.pointC,
                         Distance = 4
                     },
                     new Path
                     {
                         Id = 1,
-                        PointOne = Points.A,
-                        PointTwo = Points.B,
+                        PointOne = this.pointA,
+                        PointTwo = this.pointB,
                         Distance = 1
                     },
-                    new Path {Id = 4, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
+                    new Path {Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20},
                 }
             };
 

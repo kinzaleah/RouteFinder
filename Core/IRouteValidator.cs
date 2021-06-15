@@ -2,6 +2,6 @@
 {
     public interface IRouteValidator
     {
-        void ValidateInput(Points startPoint, Points endPoint);
+        void ValidateInput(Point startPoint, Point endPoint);
     }
 }

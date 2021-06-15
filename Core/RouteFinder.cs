@@ -1,28 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-
+﻿
 namespace Core
 {
-    public class RouteFinder
+    using System.Linq;
+    using Core.Data;
+
+    public class RouteFinder : IRouteFinder
     {
         private readonly IRouteExplorer routeExplorer;
         private readonly IShortestRouteFinder shortestRouteFinder;
-        private readonly List<Path> paths;
+        private readonly IDatabaseReader databaseReader;
         private readonly IRouteValidator routeValidator;
 
-        public RouteFinder(IRouteExplorer routeExplorer, IShortestRouteFinder shortestRouteFinder, List<Path> paths, IRouteValidator routeValidator)
+
+        public RouteFinder(IRouteExplorer routeExplorer, IShortestRouteFinder shortestRouteFinder, IDatabaseReader databaseReader, IRouteValidator routeValidator)
         {
             this.routeExplorer = routeExplorer;
             this.shortestRouteFinder = shortestRouteFinder;
-            this.paths = paths;
+            this.databaseReader = databaseReader;
             this.routeValidator = routeValidator;
         }
         
-        public Route CalculateShortestRoute(Points startPoint, Points endPoint)
+        public Route CalculateShortestRoute(Point startPoint, Point endPoint)
         {
+            var paths = this.databaseReader.GetAllPaths().ToList();
+            
             this.routeValidator.ValidateInput(startPoint, endPoint);
 
-            var allPossibleRoutes = this.routeExplorer.GetAllPossibleRoutes(this.paths, startPoint, endPoint);
+            var allPossibleRoutes = this.routeExplorer.GetAllPossibleRoutes(paths, startPoint, endPoint);
 
             var shortestRoute = this.shortestRouteFinder.GetShortestRoute(allPossibleRoutes);
 
