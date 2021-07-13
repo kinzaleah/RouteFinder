@@ -1,4 +1,6 @@
-﻿namespace Core.Data
+﻿using System.ComponentModel.Design.Serialization;
+
+namespace Core.Data
 {
     using System.Collections.Generic;
     using System.Data.SqlClient;
@@ -7,50 +9,39 @@
 
     public class DatabaseReader : IDatabaseReader
     {
-        private const string ConnectionString = @"Server=LT229\SQLEXPRESS;Database=RouteFinder;User Id=routefinder_user;Password=Welcome1!;";
+        //private const string ConnectionString = @"Server=LT229\SQLEXPRESS;Database=RouteFinder;User Id=routefinder_user;Password=Welcome1!;";
+        private const string ConnectionString = @"Server=LT187;Database=RouteFinder;User Id=routefinder_user;Password=Welcome1!;";
+
         public IEnumerable<Path> GetAllPaths()
         {
-            List<Path> paths;
+            var paths = new List<Path>();
 
             using (var connection = new SqlConnection(ConnectionString))
             {
-                var query = @"SELECT 
-                                paths.Id, 
-                                p1.Id as PointOneId,
-                                p2.Id as PointTwoId,
-                                p1.name as PointOneName, 
-                                p2.name as PointTwoName, 
-                                paths.Distance 
-                            FROM Paths 
-                            JOIN Points as p1 
-                            ON Paths.PointOne=p1.id 
-                            JOIN Points as p2 
-                           ON Paths.PointTwo=p2.id";
+                const string query = @"SELECT 
+                                        [P].Id as Id, 
+                                        [P].Distance,                                         
+                                        [PTS_1].Id as Id,
+                                        [PTS_1].Name,
+                                        [PTS_2].Id as Id,
+                                        [PTS_2].Name
+                                    FROM [Paths] [P]
+                                    JOIN [Points] [PTS_1] ON [P].PointOne = [PTS_1].Id
+                                    JOIN [Points] [PTS_2] ON [P].PointTwo = [PTS_2].Id;";
 
-                paths = connection.Query<Path>(query).ToList();
+                var result = connection.Query<Path, Point, Point, Path>(
+                    query,
+                    (path, pointOne, pointTwo) =>
+                    {
+                        path.PointOne = pointOne;
+                        path.PointTwo = pointTwo;
+                        return path;
+                    });
+
+                paths.AddRange(result.OrderBy(x => x.Id));
             }
 
-            // Need to convert to Paths!!!
-
-            //var paths = new List<Path>();
-
-            //foreach (var point in points)
-            //{
-            //    paths.Add( new Path() { Id = point.Id});
-            //}
-
             return paths;
-
-            
-
-            //return new List<Path>
-            //{
-            //    new Path {Id = 1, PointOne = Points.A, PointTwo = Points.D, Distance = 20},
-            //    new Path {Id = 2, PointOne = Points.D, PointTwo = Points.A, Distance = 14},
-            //    new Path {Id = 3, PointOne = Points.A, PointTwo = Points.C, Distance = 15},
-            //    new Path {Id = 4, PointOne = Points.A, PointTwo = Points.B, Distance = 5},
-            //    new Path {Id = 5, PointOne = Points.B, PointTwo = Points.C, Distance = 5}
-            //};
         }
     }
 }

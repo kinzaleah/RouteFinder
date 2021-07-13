@@ -26,8 +26,8 @@ namespace Core
         {
             foreach (var nextPath in paths)
             {
-                var nextPathMatchesForwards = startPoint == nextPath.PointOne;
-                var nextPathMatchesBackwards = startPoint == nextPath.PointTwo;
+                var nextPathMatchesForwards = startPoint.Id == nextPath.PointOne.Id;
+                var nextPathMatchesBackwards = startPoint.Id == nextPath.PointTwo.Id;
 
                 var subPath = new Route();
                 subPath.Paths.AddRange(routeWeAreExploring.Paths);
@@ -41,8 +41,8 @@ namespace Core
                     continue;
                 }
 
-                var nextPathEndsHere = (nextPathMatchesForwards && nextPath.PointTwo == endPoint) ||
-                                       (nextPathMatchesBackwards && nextPath.PointOne == endPoint);
+                var nextPathEndsHere = (nextPathMatchesForwards && nextPath.PointTwo.Id == endPoint.Id) ||
+                                       (nextPathMatchesBackwards && nextPath.PointOne.Id == endPoint.Id);
 
                 if (nextPathEndsHere)
                 {
