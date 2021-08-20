@@ -51,10 +51,54 @@
         }
 
         [Fact]
+        public void Given_Two_Possible_Routes_RouteFinder_Should_Find_The_Shortest_One_CalculateShortestRouteTakesString()
+        {
+            // Arrange
+            var routes = new List<Path>
+            {
+                new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                new Path { Id = 4, PointOne = this.pointA, PointTwo = this.pointD, Distance = 20 }
+            };
+
+            var startPoint = "A";
+            var endPoint = "D";
+
+            var mockDatabaseReader = new Mock<IDatabaseReader>();
+
+            mockDatabaseReader.Setup(x => x.GetAllPaths())
+                .Returns(routes);
+
+            mockDatabaseReader.Setup(x => x.GetPoint(startPoint)).Returns(this.pointA);
+            mockDatabaseReader.Setup(x => x.GetPoint(endPoint)).Returns(this.pointD);
+
+            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), mockDatabaseReader.Object, new RouteValidator());
+
+            // Act
+            var result = routeFinder.CalculateShortestRoute(startPoint, endPoint);
+
+            // Assert
+            result.Paths.Should().BeEquivalentTo(
+                new List<Path>
+                {
+                    new Path { Id = 1, PointOne = this.pointA, PointTwo = this.pointB, Distance = 1 },
+                    new Path { Id = 2, PointOne = this.pointB, PointTwo = this.pointC, Distance = 4 },
+                    new Path { Id = 3, PointOne = this.pointC, PointTwo = this.pointD, Distance = 3 },
+                }
+            );
+        }
+
+        [Fact]
         public void Same_Start_And_End_Input_Should_Return_Exception()
         {
             // Arrange
-            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), new DatabaseReader(), new RouteValidator());
+
+            var mockDatabaseReader = new Mock<IDatabaseReader>();
+
+            mockDatabaseReader.Setup(x => x.GetAllPaths()).Returns( new List<Path>());
+
+            var routeFinder = new RouteFinder(new RouteExplorer(), new ShortestRouteFinder(), mockDatabaseReader.Object, new RouteValidator());
            
             // Act & Assert
             Assert.Throws<InputValidationException>(() => routeFinder.CalculateShortestRoute(this.pointA, this.pointA));
